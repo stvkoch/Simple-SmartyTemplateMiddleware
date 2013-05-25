@@ -9,7 +9,7 @@
 
     "autoload": {
         "psr-0": {
-            "Simple-SmartyTemplateMiddleware":"src/"
+            "SmartyTemplate":"src/"
         }
     },
 
