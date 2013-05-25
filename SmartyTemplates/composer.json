@@ -1,10 +1,10 @@
 {
-    "name":"stvkoch/smarty-template-middleware",
+    "name":"stvkoch/Simple-SmartyTemplateMiddleware",
     "type":"library",
 
     "require": {
         "php": ">=5.3.3",
-        "stvkoch/smarty-template-middleware": "dev-master"
+        "stvkoch/Simple-SmartyTemplateMiddleware": "dev-master"
     },
 
     "autoload": {
