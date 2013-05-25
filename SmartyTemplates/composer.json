@@ -1,0 +1,30 @@
+{
+    "name":"stvkoch/smarty-template-middleware",
+    "type":"library",
+
+    "require": {
+        "php": ">=5.3.3",
+        "stvkoch/smarty-template-middleware": "dev-master"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "smarty/smarty": "3.1.*"
+        }
+    },
+
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "smarty/smarty",
+                "version": "3.1",
+                "source": {
+                    "type": "svn",
+                    "url": "http://smarty-php.googlecode.com/svn/",
+                    "trunk-path":"Trunk"
+                }
+            }
+        }
+    ],
+}
