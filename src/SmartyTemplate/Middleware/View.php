@@ -74,16 +74,25 @@ class View extends \Simple\Middleware\Base
     {
         $xml = ($node && $i==0) ? "<{$node}>" : '';
 
-        foreach ($var as $key => $value) {
-            if(is_array($value)){
-                if(is_int(key($value))){
+        foreach ($var as $key => $value)
+        {
+            if(is_array($value))
+            {
+                if(is_int(key($value)))
+                {
                     $xml .= self::makeXml($key, $value, 1);
-                }elseif(!is_int($key)){
+                }
+                elseif(!is_int($key))
+                {
                     $xml .= self::makeXml($key, $value, 0);
-                }else{
+                }
+                else
+                {
                     $xml .= '<'.$node.'>'.self::makeXml($key, $value, 1).'</'.$node.'>';
                 }
-            }else{
+            }
+            else
+            {
                 if(!is_int($key))
                     $xml .= "<{$key}>$value</{$key}>";
                 else
