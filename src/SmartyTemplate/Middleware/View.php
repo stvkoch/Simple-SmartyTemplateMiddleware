@@ -38,7 +38,7 @@ class View extends \Simple\Middleware\Base
         elseif(strtolower($resource['format'])=='xml')
         {
             $rootElement = ucfirst($resource['action']);
-            return '<?xml version="1.0"?><Get'.$rootElement.'Response>'.$this->makeXml('Get'.$rootElement.'Result', $response->getVars()).'<Get'.$rootElement.'Response/>';
+            return '<?xml version="1.0"?><Get'.$rootElement.'Response>'.$this->makeXml('Get'.$rootElement.'Result', $response->getVars()).'</Get'.$rootElement.'Response>';
 
         }
         return 'Error @format not supported!';
@@ -46,6 +46,7 @@ class View extends \Simple\Middleware\Base
 
     public function send()
     {
+        $this->backbone->getResourceById('simple.controller')->getResponse()->sendHeader();
         echo $this->render();
     }
 
@@ -64,7 +65,6 @@ class View extends \Simple\Middleware\Base
                 $this->smatyInstance->force_compile = $this->resource['forceCompile'];
             if(isset($this->resource['compileCheck']))
                 $this->smatyInstance->compile_check = $this->resource['compileCheck'];
-
         }
         return $this->smatyInstance;
     }
@@ -73,7 +73,6 @@ class View extends \Simple\Middleware\Base
     static protected function makeXml($node, $var, $i=0)
     {
         $xml = ($node && $i==0) ? "<{$node}>" : '';
-
         foreach ($var as $key => $value)
         {
             if(is_array($value))
