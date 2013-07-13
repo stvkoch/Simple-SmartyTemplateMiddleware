@@ -16,7 +16,7 @@ class View extends \Simple\Middleware\Base
 {
 
     protected $smatyInstance = null;
-
+    protected $output = null;
 
     public function render()
     {
@@ -29,19 +29,19 @@ class View extends \Simple\Middleware\Base
             $loader = require '../vendor/autoload.php';
             $templateFile = $loader->findFile(substr($response->getContentFile(),1),1);
 
-            return $this->getSmatyInstance()->fetch($templateFile);
+            $response->setContent($this->getSmatyInstance()->fetch($templateFile));
         }elseif(strtolower($resource['format'])=='json')
         {
             $rootElement = ucfirst($resource['action']);
-            return json_encode( array('Get'.$rootElement.'Response'=>array('Get'.$rootElement.'Result'=>$response->getVars())) );
+            $response->setContent(json_encode( array('Get'.$rootElement.'Response'=>array('Get'.$rootElement.'Result'=>$response->getVars())) ));
         }
         elseif(strtolower($resource['format'])=='xml')
         {
             $rootElement = ucfirst($resource['action']);
-            return '<?xml version="1.0"?><Get'.$rootElement.'Response>'.$this->makeXml('Get'.$rootElement.'Result', $response->getVars()).'</Get'.$rootElement.'Response>';
-
+            $response->setContent('<?xml version="1.0"?><Get'.$rootElement.'Response>'. \SmartyTemplate\Lib\ArrayToXml::encode('Get'.$rootElement.'Result', $response->getVars()) .'</Get'.$rootElement.'Response>');
         }
-        return 'Error @format not supported!';
+
+        return $response->getContent();
     }
 
     public function send()
@@ -67,39 +67,6 @@ class View extends \Simple\Middleware\Base
                 $this->smatyInstance->compile_check = $this->resource['compileCheck'];
         }
         return $this->smatyInstance;
-    }
-
-
-    static protected function makeXml($node, $var, $i=0)
-    {
-        $xml = ($node && $i==0) ? "<{$node}>" : '';
-        foreach ($var as $key => $value)
-        {
-            if(is_array($value))
-            {
-                if(is_int(key($value)))
-                {
-                    $xml .= self::makeXml($key, $value, 1);
-                }
-                elseif(!is_int($key))
-                {
-                    $xml .= self::makeXml($key, $value, 0);
-                }
-                else
-                {
-                    $xml .= '<'.$node.'>'.self::makeXml($key, $value, 1).'</'.$node.'>';
-                }
-            }
-            else
-            {
-                if(!is_int($key))
-                    $xml .= "<{$key}>$value</{$key}>";
-                else
-                    $xml .= "<{$node}>{$value}</{$node}>";
-            }
-        }
-        $xml .= ($node&& $i==0) ?  "</{$node}>" :'';
-        return $xml;
     }
 
 
